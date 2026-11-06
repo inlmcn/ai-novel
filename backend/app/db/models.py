@@ -81,7 +81,7 @@ class Chapter(UUIDPrimaryKey, TimestampMixin, Base):
     outline: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, default=dict, nullable=False)
 
 
-class ChapterVersion(UUIDPrimaryKey):
+class ChapterVersion(UUIDPrimaryKey, Base):
     __tablename__ = "chapter_versions"
     __table_args__ = (
         UniqueConstraint("id", "chapter_id", name="uq_chapter_versions_id_chapter_id"),
@@ -101,7 +101,7 @@ class ChapterVersion(UUIDPrimaryKey):
     metadata_json: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, default=dict, nullable=False)
 
 
-class ReviewReport(UUIDPrimaryKey):
+class ReviewReport(UUIDPrimaryKey, Base):
     __tablename__ = "review_reports"
     __table_args__ = (
         ForeignKeyConstraint(
@@ -110,6 +110,7 @@ class ReviewReport(UUIDPrimaryKey):
             name="fk_review_reports_version_same_chapter",
             ondelete="CASCADE",
         ),
+        UniqueConstraint("id", "chapter_id", name="uq_review_reports_id_chapter_id"),
         Index("ix_review_reports_chapter_created", "chapter_id", "created_at"),
     )
 
@@ -125,7 +126,7 @@ class ReviewReport(UUIDPrimaryKey):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
 
-class ReviewIssue(UUIDPrimaryKey):
+class ReviewIssue(UUIDPrimaryKey, Base):
     __tablename__ = "review_issues"
     __table_args__ = (
         ForeignKeyConstraint(
@@ -147,7 +148,7 @@ class ReviewIssue(UUIDPrimaryKey):
     status: Mapped[str] = mapped_column(String(24), default="open", nullable=False)
 
 
-class AgentRun(UUIDPrimaryKey):
+class AgentRun(UUIDPrimaryKey, Base):
     __tablename__ = "agent_runs"
     __table_args__ = (Index("ix_agent_runs_status_created", "status", "created_at"),)
 
@@ -179,7 +180,7 @@ class StoryMemory(UUIDPrimaryKey, TimestampMixin, Base):
     attributes: Mapped[dict[str, Any]] = mapped_column(JSON_DOCUMENT, default=dict, nullable=False)
 
 
-class OutboxEvent(UUIDPrimaryKey):
+class OutboxEvent(UUIDPrimaryKey, Base):
     __tablename__ = "outbox_events"
     __table_args__ = (Index("ix_outbox_events_published_created", "published_at", "created_at"),)
 
