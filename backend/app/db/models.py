@@ -6,7 +6,7 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
-    Boolean, CheckConstraint, DateTime, ForeignKey, ForeignKeyConstraint, Index,
+    CheckConstraint, DateTime, ForeignKey, ForeignKeyConstraint, Index,
     Integer, JSON, String, Text, UniqueConstraint, Uuid
 )
 from sqlalchemy.dialects.postgresql import JSONB
