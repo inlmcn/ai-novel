@@ -39,4 +39,4 @@ API health endpoint: `GET /api/v1/health`.
 
 ## Current status
 
-Bootstrap baseline is on `feat/bootstrap`. The API health endpoint and Vue shell are scaffolding only. Database models, migrations, authentication, LLM gateway, agent workflow, and production tests are not implemented yet.
+Bootstrap baseline and first persistence-model draft are on `feat/bootstrap`. The API health endpoint, Vue shell, SQLAlchemy entity definitions, async session factory, and Alembic environment are scaffolding. An initial generated migration, database integration tests, authentication, LLM gateway, and agent workflow are not implemented yet. No local build or test execution has been performed in this environment.
