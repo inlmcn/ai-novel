@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     app_env: str = "local"
     api_v1_prefix: str = "/api/v1"
     log_level: str = "INFO"
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ai_novel"
+    redis_url: str = "redis://localhost:6379/0"
 
 
 @lru_cache(maxsize=1)
