@@ -10,23 +10,44 @@ AI-assisted novel writing and independent editorial quality-control platform.
 - Long-form story memory with structured facts and semantic retrieval
 - Editorial reports, evidence-linked issues, and submission-readiness diagnostics
 
-## Technology
+## Technology direction
 
 - Frontend: Vue 3, TypeScript, Vite, Pinia
 - Backend: Python 3.10+, FastAPI, Pydantic v2, SQLAlchemy 2 async
 - Workflow: LangGraph
-- Data: PostgreSQL + pgvector; Redis for queueing and event delivery
+- Persistence planned for later milestones: PostgreSQL + pgvector
+- Queue/cache planned for later milestones: Redis
 
-## Local development
+## M0: run without Docker
 
-1. Copy `.env.example` to `.env` and adjust credentials if needed.
-2. Start infrastructure: `docker compose up -d`.
-3. Install backend dependencies: `python -m pip install -e '.[dev]'`.
-4. Start API: `PYTHONPATH=backend uvicorn app.main:app --reload --app-dir backend`.
-5. Install frontend dependencies: `cd frontend && npm install`.
-6. Start frontend: `npm run dev`.
+M0 deliberately has **no Docker, PostgreSQL, or Redis startup dependency**. The health endpoint and frontend shell can be developed independently.
 
-API health endpoint: `GET /api/v1/health`.
+### Backend
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+PYTHONPATH=backend uvicorn app.main:app --reload --app-dir backend
+```
+
+Health endpoint: `http://127.0.0.1:8000/api/v1/health`.
+
+### Frontend
+
+In a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend: `http://127.0.0.1:5173`.
+
+### Environment
+
+Copy `.env.example` to `.env` if you need to override settings. Database and Redis settings are placeholders for later milestones; M0 does not connect to either service.
 
 ## Engineering principles
 
@@ -39,4 +60,4 @@ API health endpoint: `GET /api/v1/health`.
 
 ## Current status
 
-Bootstrap baseline and first persistence-model draft are on `feat/bootstrap`. The API health endpoint, Vue shell, SQLAlchemy entity definitions, async session factory, and Alembic environment are scaffolding. An initial generated migration, database integration tests, authentication, LLM gateway, and agent workflow are not implemented yet. No local build or test execution has been performed in this environment.
+M0 bootstrap is on `feat/bootstrap`. The API health endpoint and Vue shell are scaffolding. SQLAlchemy model definitions and the Alembic environment are early M1 groundwork, not yet a validated database migration. No local build, dependency installation, migration, or test execution has been performed in this environment.
