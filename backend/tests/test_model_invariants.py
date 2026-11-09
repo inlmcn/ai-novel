@@ -1,16 +1,7 @@
-from sqlalchemy import CheckConstraint, ForeignKeyConstraint
+from sqlalchemy import CheckConstraint, ForeignKeyConstraint, UniqueConstraint
 
 from app.db.base import Base
-from app.db.models import (
-    AgentRun,
-    Chapter,
-    ChapterVersion,
-    Novel,
-    OutboxEvent,
-    ReviewIssue,
-    ReviewReport,
-    StoryMemory,
-)
+from app.db import models  # noqa: F401 - register model metadata
 
 
 def _checks(table_name: str) -> set[str]:
@@ -40,8 +31,7 @@ def test_chapter_version_is_idempotent_and_monotonic() -> None:
     unique_sets = {
         tuple(column.name for column in constraint.columns)
         for constraint in table.constraints
-        if getattr(constraint, "name", None)
-        and constraint.__class__.__name__ == "UniqueConstraint"
+        if isinstance(constraint, UniqueConstraint)
     }
     assert ("chapter_id", "version_no") in unique_sets
     assert ("chapter_id", "idempotency_key") in unique_sets
