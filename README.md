@@ -10,13 +10,44 @@ AI-assisted novel writing and independent editorial quality-control platform.
 - Long-form story memory with structured facts and semantic retrieval
 - Editorial reports, evidence-linked issues, and submission-readiness diagnostics
 
-## Architecture direction
+## Technology direction
 
 - Frontend: Vue 3, TypeScript, Vite, Pinia
 - Backend: Python 3.10+, FastAPI, Pydantic v2, SQLAlchemy 2 async
 - Workflow: LangGraph
-- Data: PostgreSQL + pgvector; Redis for queueing and event delivery
-- Deployment: Docker Compose for local development; modular monolith API plus worker
+- Persistence planned for later milestones: PostgreSQL + pgvector
+- Queue/cache planned for later milestones: Redis
+
+## M0: run without Docker
+
+M0 deliberately has **no Docker, PostgreSQL, or Redis startup dependency**. The health endpoint and frontend shell can be developed independently.
+
+### Backend
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+PYTHONPATH=backend uvicorn app.main:app --reload --app-dir backend
+```
+
+Health endpoint: `http://127.0.0.1:8000/api/v1/health`.
+
+### Frontend
+
+In a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend: `http://127.0.0.1:5173`.
+
+### Environment
+
+Copy `.env.example` to `.env` if you need to override settings. Database and Redis settings are placeholders for later milestones; M0 does not connect to either service.
 
 ## Engineering principles
 
@@ -27,6 +58,6 @@ AI-assisted novel writing and independent editorial quality-control platform.
 5. Every model run, review, revision, and decision must be traceable.
 6. AI-generated quality scores are diagnostics, not guarantees of publication acceptance.
 
-## Status
+## Current status
 
-Repository bootstrap. Implementation status and setup instructions will be updated as milestones land.
+M0 bootstrap is on `feat/bootstrap`. The API health endpoint and Vue shell are scaffolding. SQLAlchemy model definitions and the Alembic environment are early M1 groundwork, not yet a validated database migration. No local build, dependency installation, migration, or test execution has been performed in this environment.
